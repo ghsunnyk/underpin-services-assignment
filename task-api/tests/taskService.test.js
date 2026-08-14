@@ -95,8 +95,6 @@ describe('getByStatus', () => {
 
     const result = taskService.getByStatus('do');
 
-    console.log('Result for getByStatus("do"):', result);
-
     expect(result).toHaveLength(0);
   });
 

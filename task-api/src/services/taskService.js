@@ -10,8 +10,10 @@ const getByStatus = (status) => tasks.filter((t) => t.status.includes(status));
 // const getByStatus = (status) => tasks.filter((t) => t.status === status);
 
 const getPaginated = (page, limit) => {
-  const offset = page * limit;
-  // const offset = (page - 1) * limit;
+  // const offset = page * limit;
+
+  // Solution
+  const offset = (page - 1) * limit;
   return tasks.slice(offset, offset + limit);
 };
 
@@ -51,7 +53,6 @@ const update = (id, fields) => {
 
   const updated = { ...tasks[index], ...fields }; 
 
-  // Solutions
   // const { id: _, ...rest } = fields;
   // const updated = { ...tasks[index], ...rest };
   
