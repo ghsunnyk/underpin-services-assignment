@@ -6,13 +6,17 @@ const getAll = () => [...tasks];
 
 const findById = (id) => tasks.find((t) => t.id === id);
 
-// const getByStatus = (status) => tasks.filter((t) => t.status.includes(status));
-const getByStatus = (status) => tasks.filter((t) => t.status === status);
+const getByStatus = (status) => tasks.filter((t) => t.status.includes(status)); // This allows for partial matches, e.g., "do" will match "todo"
+
+// Solution
+// const getByStatus = (status) => tasks.filter((t) => t.status === status);
 
 const getPaginated = (page, limit) => {
-  // const offset = page * limit;
+  // const offset = page * limit; // It should be (page - 1) * limit to correctly calculate the offset for pagination
 
+  // Solution
   const offset = (page - 1) * limit;
+
   return tasks.slice(offset, offset + limit);
 };
 
@@ -31,13 +35,14 @@ const getStats = () => {
   return { ...counts, overdue };
 };
 
-const create = ({ title, description = '', status = 'todo', priority = 'medium', dueDate = null }) => {
+const create = ({ title, description = '', status = 'todo', priority = 'medium', assignee = null, dueDate = null }) => {
   const task = {
     id: uuidv4(),
     title,
     description,
     status,
     priority,
+    assignee,
     dueDate,
     completedAt: null,
     createdAt: new Date().toISOString(),
@@ -50,10 +55,11 @@ const update = (id, fields) => {
   const index = tasks.findIndex((t) => t.id === id);
   if (index === -1) return null;
 
-  // const updated = { ...tasks[index], ...fields }; 
+  const updated = { ...tasks[index], ...fields }; // This line merges the existing task with the new fields, id and createdAt are preserved.
 
-  const { id: _, ...rest } = fields;
-  const updated = { ...tasks[index], ...rest };
+  // Solution
+  // const { id: _, ...rest } = fields;
+  // const updated = { ...tasks[index], ...rest };
   
   tasks[index] = updated;
   return updated;
@@ -71,18 +77,19 @@ const completeTask = (id) => {
   const task = findById(id);
   if (!task) return null;
 
-  // const updated = {
-  //   ...task,
-  //   priority: 'medium',
-  //   status: 'done',
-  //   completedAt: new Date().toISOString(),
-  // };
-
   const updated = {
     ...task,
+    priority: 'medium',
     status: 'done',
     completedAt: new Date().toISOString(),
-  }
+  }; // Here, we are updating the task's priority to 'medium', which is incorrect.
+
+  // Solution
+  // const updated = {
+  //   ...task,
+  //   status: 'done',
+  //   completedAt: new Date().toISOString(),
+  // }
 
   const index = tasks.findIndex((t) => t.id === id);
   tasks[index] = updated;

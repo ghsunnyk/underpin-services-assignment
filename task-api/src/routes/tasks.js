@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const taskService = require('../services/taskService');
 const { validateCreateTask, validateUpdateTask } = require('../utils/validators');
+const { validateAssignTask } = require('../utils/validators');
 
 router.get('/stats', (req, res) => {
   const stats = taskService.getStats();
